@@ -6,11 +6,11 @@ CREATE TABLE sap_byd_data (
     json_data JSONB
 );
 
--- Extracting and transforming relevant data from the JSON
+-- Extracting and transforming relevant data from the JSON dynamically
 SELECT
     id,
-    json_data->>'propertyName' AS property_name,
-    json_data->>'anotherProperty' AS another_property,
-    -- Add more transformations as needed
+    kv.key AS property_name,
+    kv.value AS property_value
 FROM
-    sap_byd_data;
+    sap_byd_data,
+    jsonb_each_text(json_data) AS kv;
